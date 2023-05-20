@@ -10,26 +10,20 @@ const Page: React.FC = ()=> {
   const [coinValues, setCoinValues] = useState<Array<object>>([]);
 
   useEffect(() => {
-    const fetchData = () => {
+    socket.on("connect", () => {
+      console.log("Connected to server");
       socket.emit("getCoinData");
-    };
+    });
+
+      socket.on("coinData", (data) => {
+        //console.log("Received quotes:", data);
+        setCoinValues(data);
+      });
   
-    const updateData = (data: Array<object>) => {
-      setCoinValues(data);
-    };
-  
-    // Fetch initial data and set up interval
-    fetchData();
-    const interval = setInterval(fetchData, 20000); // Fetch data every 20 seconds
-  
-    // Subscribe to socket events
-    socket.on("coinData", updateData);
-  
-    // Clean up resources
-    return () => {
-      clearInterval(interval);
-      socket.off("coinData", updateData);
-    };
+      return () => {
+        socket.disconnect();
+        console.log("Disconnected from server");
+      };
     }, []);
 
   return coinValues && (
@@ -63,6 +57,7 @@ const Page: React.FC = ()=> {
         ):
         (
           <div>
+            {}
           </div>
         )
       } 
