@@ -1,22 +1,13 @@
-import cheerio from 'cheerio';
-
-const getCryptodata = async ()=>{
+import axios from 'axios';
+const getCryptoData = async ()=>{
   try{
-      const response  = await fetch('https://www.coingecko.com/');
-
-      const dom = await response.text();
-      
-      const $ = cheerio.load(dom);
-      const bitcoinVal = $('.no-wrap').text().split(/\$/);
-      const firstTenValues = bitcoinVal.slice(1, 8);
-      
-      return firstTenValues;
+    let response = await axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&locale=en');
+    let data = response.data;
+    return data;
   }
   catch(error){
-      console.log(error);
+    console.log(error);
   }
 }
 
-export default {
-   getCryptodata
-};
+export default getCryptoData

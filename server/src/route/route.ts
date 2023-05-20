@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 //In the TypeScript code, we import the Server and Socket types from the "socket.io" module.
-import getAllFunctions from '../controller/controller'
+import getCryptoData from "../controller/controller";
 
 function handleSocketIO(io: Server){
     io.on("connection", (socket: Socket) => {
@@ -11,8 +11,8 @@ function handleSocketIO(io: Server){
         });
         
         socket.on("getCoinData", async () => {
-            const data = await getAllFunctions.getCryptodata();
-            console.log(data);
+            const data = await getCryptoData();
+            //console.log(data);
             socket.emit("coinData", data);
         });
     });
