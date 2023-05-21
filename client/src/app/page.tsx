@@ -15,15 +15,14 @@ const Page: React.FC = ()=> {
       socket.emit("getCoinData");
     });
 
+    const intervalId = setInterval(() => {
       socket.on("coinData", (data) => {
         //console.log("Received quotes:", data);
         setCoinValues(data);
       });
-  
-      return () => {
-        socket.disconnect();
-        console.log("Disconnected from server");
-      };
+    }, 20000);
+    
+    return () => clearInterval(intervalId);
     }, []);
 
   return coinValues && (
@@ -57,7 +56,6 @@ const Page: React.FC = ()=> {
         ):
         (
           <div>
-            {}
           </div>
         )
       } 
